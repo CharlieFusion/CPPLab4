@@ -5,9 +5,14 @@
 
 #define Max(a,b) ((a)>(b)?(a):(b))
 
-#define N 137          // 128 + k, k=9
+#ifndef N_VALUE
+#define N_VALUE 137
+#endif
+
+#define N N_VALUE
+
 double maxeps = 0.1e-7;
-int itmax = 11;        // 10 + k%4 = 10+1
+int itmax = 11;
 int i, j, k;
 double eps;
 double A[N][N][N], B[N][N][N];
