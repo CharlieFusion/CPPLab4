@@ -43,4 +43,4 @@ endforeach()
 
 # add_executable(jacobi_threads src/jacobi_threads.cpp)
 
-target_link_libraries(jacobi_threads OpenMP::OpenMP_C)
+# target_link_libraries(jacobi_threads OpenMP::OpenMP_C)
