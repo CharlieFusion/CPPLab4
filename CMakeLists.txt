@@ -9,7 +9,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/bin)
 find_package(OpenMP REQUIRED)
 
 if(OpenMP_C_FOUND)
-    # Получаем флаги
     get_target_property(OpenMP_FLAGS OpenMP::OpenMP_C INTERFACE_COMPILE_OPTIONS)
     if(NOT OpenMP_FLAGS)
         set(OpenMP_FLAGS ${OpenMP_C_FLAGS})
@@ -21,8 +20,6 @@ else()
     message(FATAL_ERROR "OpenMP not found")
 endif()
 
-# add_executable(jacobi_static src/jacobi_static.cpp)
-
 set(N_VALUES 137 201 233 265 297)
 
 foreach(N ${N_VALUES})
@@ -32,7 +29,6 @@ foreach(N ${N_VALUES})
     add_executable(jacobi_t_N${N} src/jacobi_threads.cpp)
     target_compile_definitions(jacobi_t_N${N} PRIVATE N_VALUE=${N})
 
-    # Добавляем OpenMP флаги вручную для MinGW
     if(MINGW)
         target_compile_options(jacobi_t_N${N} PRIVATE -fopenmp)
         target_link_options(jacobi_t_N${N} PRIVATE -fopenmp)
@@ -40,12 +36,7 @@ foreach(N ${N_VALUES})
         target_link_libraries(jacobi_t_N${N} OpenMP::OpenMP_C)
     endif()
 
-    # Для статической версии гарантируем, что OpenMP не используется
     if(MINGW)
         target_compile_options(jacobi_s_N${N} PRIVATE -U_OPENMP)
     endif()
 endforeach()
-
-# add_executable(jacobi_threads src/jacobi_threads.cpp)
-
-# target_link_libraries(jacobi_threads OpenMP::OpenMP_C)
