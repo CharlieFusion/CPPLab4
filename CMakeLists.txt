@@ -7,6 +7,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/bin)
 
 find_package(OpenMP REQUIRED)
+find_package(MPI REQUIRED)
 
 if(OpenMP_C_FOUND)
     get_target_property(OpenMP_FLAGS OpenMP::OpenMP_C INTERFACE_COMPILE_OPTIONS)
@@ -40,3 +41,11 @@ foreach(N ${N_VALUES})
         target_compile_options(jacobi_s_N${N} PRIVATE -U_OPENMP)
     endif()
 endforeach()
+
+add_executable(jacobi_mpi src/jacobi_threads_mpi.cpp)
+
+target_link_libraries(jacobi_mpi PUBLIC MPI::MPI_CXX)
+
+if(MINGW)
+    target_compile_options(jacobi_mpi PRIVATE -lmsmpi)
+endif()
